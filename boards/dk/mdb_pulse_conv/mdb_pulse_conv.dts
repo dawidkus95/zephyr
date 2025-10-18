@@ -1,0 +1,138 @@
+/*
+ * Copyright (c) 2025 Dawid Kus <dawidkus95@gmail.com>
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include <st/g0/stm32g030X8.dtsi>
+#include <st/g0/stm32g030c(6-8)tx-pinctrl.dtsi>
+
+/ {
+	model = "MDB to PULSE converter board";
+	compatible = "dk,mdb_pulse_conv";
+
+	aliases {
+		led0 = &led_coin;
+		led1 = &led_mdb;
+		led2 = &led_st_red;
+		led3 = &led_st_green;
+		uart-com = &usart1;
+		uart-mdb = &usart2;
+	};
+
+	chosen {
+		zephyr,console = &usart1;
+		zephyr,shell-uart = &usart1;
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led_st_red: led_st_red {
+			gpios = <&gpiod 2 GPIO_ACTIVE_HIGH>;
+			label = "Status Red Led";
+		};
+
+		led_st_green: led_st_green {
+			gpios = <&gpiod 3 GPIO_ACTIVE_HIGH>;
+			label = "Status Green Led";
+		};
+
+		led_coin: led_coin {
+			gpios = <&gpiod 0 GPIO_ACTIVE_HIGH>;
+			label = "Coin Led";
+		};
+
+		led_mdb: led_mdb {
+			gpios = <&gpiod 1 GPIO_ACTIVE_HIGH>;
+			label = "Mdb Led";
+		};
+	};
+
+	coin_conn {
+		coin_ch1: coin_ch1 {
+			gpios = <&gpiob 0 GPIO_ACTIVE_LOW>;
+			label = "Coin Ch1";
+		};
+		
+		coin_ch2: coin_ch2 {
+			gpios = <&gpiob 1 GPIO_ACTIVE_LOW>;
+			label = "Coin Ch2";
+		};
+
+		coin_ch3: coin_ch3 {
+			gpios = <&gpiob 2 GPIO_ACTIVE_LOW>;
+			label = "Coin Ch3";
+		};
+
+		coin_ch4: coin_ch4 {
+			gpios = <&gpiob 10 GPIO_ACTIVE_LOW>;
+			label = "Coin Ch4";
+		};
+
+		coin_ch5: coin_ch5 {
+			gpios = <&gpiob 11 GPIO_ACTIVE_LOW>;
+			label = "Coin Ch5";
+		};
+
+		coin_ch6: coin_ch6 {
+			gpios = <&gpiob 12 GPIO_ACTIVE_LOW>;
+			label = "Coin Ch6";
+		};
+
+		coin_inh: coin_inh {
+			gpios = <&gpioa 7 GPIO_ACTIVE_HIGH>;
+			label = "Coin Inhibit";
+		};
+	};
+
+	user_conn {
+		in_disable: in_disable {
+			gpios = <&gpiob 9 GPIO_ACTIVE_LOW>;
+			label = "Input Disable";
+		};
+
+		out_pulse: out_pulse {
+			gpios = <&gpioa 0 GPIO_ACTIVE_HIGH>;
+			label = "Output Pulse";
+		};
+	};
+};
+
+&clk_hsi {
+	status = "okay";
+};
+
+&pll {
+	div-m = <1>;
+	mul-n = <8>;
+	div-r = <2>;
+	clocks = <&clk_hsi>;
+	status = "okay";
+};
+
+&rcc {
+	clocks = <&pll>;
+	clock-frequency = <DT_FREQ_M(64)>;
+	ahb-prescaler = <1>;
+	apb1-prescaler = <1>;
+};
+
+&usart1 {
+	pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10>;
+	pinctrl-names = "default";
+	current-speed = <115200>;
+	fifo-enable;
+	status = "okay";
+};
+
+&usart2 {
+	pinctrl-0 = <&usart2_tx_pa2 &usart2_rx_pa3>;
+	pinctrl-names = "default";
+	current-speed = <9600>;
+	data-bits = <9>;
+	status = "okay";
+};

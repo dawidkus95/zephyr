@@ -1,0 +1,6 @@
+board:
+  name: mdb_pulse_conv
+  full_name: MDB to PULSE converter
+  vendor: dk
+  socs:
+    - name: stm32g030xx
