@@ -1,0 +1,8 @@
+# Vending board with STM32G030C8 MCU
+
+# Copyright (c) 2025 Dawid Kus <dawidkus95@gmail.com>
+# SPDX-License-Identifier: Apache-2.0
+
+if BOARD_MDB_PULSE_CONV
+
+endif # BOARD_MDB_PULSE_CONV
